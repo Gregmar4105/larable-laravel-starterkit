@@ -25,8 +25,14 @@ Larable's Docker setup is defined in `docker-compose.yml` at the project root.
 - Catches all outgoing emails
 
 ### redis (Cache, Session, & Queue)
-- Redis Alpine image on port 6379
-- Acts as central store for caching, user session states, and background queue jobs for optimal host performance.
+- **Image**: `redis:alpine` running on port `6379`
+- **Purpose**: Centralized storage for user sessions, caching, and queue queues, removing high-write/read loads from the local filesystem or DB.
+- **Client**: Configured to use the PHP-native `predis` client package, avoiding compilation of native C extensions.
+- **Database Indexing**:
+  - **DB 0**: User Sessions (`SESSION_DRIVER=redis`)
+  - **DB 1**: Cache storage (`CACHE_STORE=redis`)
+  - **Queues**: Job queues (`QUEUE_CONNECTION=redis`)
+- **Key Prefixing**: Prefixes keys with `larable-database-` (for DB 0/Redis level) and `larable-cache-` (for cache stores) to prevent overlaps in multi-tenant or shared setups.
 
 ## Network
 

@@ -197,6 +197,7 @@ larable-laravel-staterkit/
 | `frontend` | Node 20 Alpine | 3000 | React Vite dev server |
 | `pgsql` | PostgreSQL 16 | 5432 | PostgreSQL database |
 | `mailpit` | Mailpit | 1025 (SMTP), 8025 (UI) | Email testing |
+| `redis` | Redis Alpine | 6379 | Caching, Sessions, & Queue store |
 | `dnsmasq` | dnsmasq | 53 (UDP/TCP) | Wildcard DNS (.test mapping to 127.0.0.1) |
 
 ### Default Credentials
@@ -475,6 +476,25 @@ users ─────────┬──────── personal_access_tok
                └──────── passkeys
                          (user_id → users.id)
 ```
+
+### Redis & Session Configuration
+
+Larable utilizes **Redis** for storing caching data, user sessions, and background job queues. This ensures extreme responsiveness compared to standard database or file drivers.
+
+- **Client**: PHP-native `predis` package.
+- **Database Allocation**:
+  - **DB 0**: User sessions (`SESSION_DRIVER=redis`).
+  - **DB 1**: Cache store (`CACHE_STORE=redis`).
+  - **Queues**: Background jobs (`QUEUE_CONNECTION=redis`).
+- **Session Cookie Isolation**: To prevent session clashes between a local host-level **Laravel Herd/Valet** environment (running on HTTPS with a `Secure` cookie) and the **Docker** environment (running on HTTP on port 8000), the session cookie name is isolated using `SESSION_COOKIE=larable_docker_session` in `.env`.
+
+### Query Optimization
+
+1. **N+1 Query Prevention**: Strict loading is enabled in non-production environments inside `AppServiceProvider.php` via `Model::preventLazyLoading(! app()->isProduction());`. If any code attempts to lazy-load relationship attributes, a `LazyLoadingViolationException` is thrown, prompting developers to write explicit `with(...)` eager-loading clauses.
+2. **Index Optimization**:
+   - Primary and unique keys are automatically indexed by PostgreSQL.
+   - All foreign keys (e.g. `passkeys.user_id`) are explicitly indexed to optimize JOIN performance.
+   - High-throughput columns like `sessions.last_activity` are indexed to minimize lookup latencies.
 
 ---
 
