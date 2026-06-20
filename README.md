@@ -7,6 +7,9 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+> [!IMPORTANT]
+> **AI Coding Agent Instructions**: Before modifying or editing any code in this repository, you **MUST** read and adhere to the developer guidelines defined in [docs/copilot-instructions.md](docs/copilot-instructions.md).
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

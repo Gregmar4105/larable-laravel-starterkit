@@ -15,6 +15,7 @@ Welcome to the Larable documentation. This is the root index for all project doc
 - [[getting-started]] — Setup and first run
 - [[docker]] — Docker configuration guide
 - [[deployment]] — Production deployment
+- [[copilot-instructions]] — AI agent development guidelines
 
 ## API Reference
 
