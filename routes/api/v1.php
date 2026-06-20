@@ -20,6 +20,7 @@ Route::get('/health', function () {
         'status' => 'ok',
         'version' => 'v1',
         'timestamp' => now()->toIso8601String(),
+        'debug' => config('app.debug'),
     ]);
 })->name('api.v1.health');
 

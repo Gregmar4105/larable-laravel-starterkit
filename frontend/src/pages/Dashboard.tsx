@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { LayoutDashboard, User, Shield, Key, Activity } from 'lucide-react';
+import api from '../lib/axios';
 
 /**
  * Dynamically resolve the backend API URL.
@@ -22,6 +24,17 @@ const getBackendUrl = () => {
  */
 export default function Dashboard() {
   const { user } = useAuth();
+  const [isDebug, setIsDebug] = useState<boolean>(false);
+
+  useEffect(() => {
+    api.get('/health')
+      .then(response => {
+        setIsDebug(!!response.data.debug);
+      })
+      .catch(() => {
+        setIsDebug(false);
+      });
+  }, []);
 
   const stats = [
     { icon: <User size={20} />, label: 'Account', value: user?.name || '—' },
@@ -54,21 +67,23 @@ export default function Dashboard() {
       </div>
 
       {/* ─── Quick Links ─────────────────────────────────────────── */}
-      <div className="dashboard-section">
-        <h2>Quick Actions</h2>
-        <div className="quick-links">
-          <a href={`${getBackendUrl()}/larable`} target="_blank" rel="noopener noreferrer" className="quick-link-card">
-            <Activity size={24} />
-            <span>API Playground</span>
-            <p>Test API endpoints in the backend GUI</p>
-          </a>
-          <a href="http://localhost:8025" target="_blank" rel="noopener noreferrer" className="quick-link-card">
-            <LayoutDashboard size={24} />
-            <span>Mailpit</span>
-            <p>View sent emails in the test inbox</p>
-          </a>
+      {isDebug && (
+        <div className="dashboard-section">
+          <h2>Quick Actions</h2>
+          <div className="quick-links">
+            <a href={`${getBackendUrl()}/larable`} target="_blank" rel="noopener noreferrer" className="quick-link-card">
+              <Activity size={24} />
+              <span>API Playground</span>
+              <p>Test API endpoints in the backend GUI</p>
+            </a>
+            <a href="http://localhost:8025" target="_blank" rel="noopener noreferrer" className="quick-link-card">
+              <LayoutDashboard size={24} />
+              <span>Mailpit</span>
+              <p>View sent emails in the test inbox</p>
+            </a>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

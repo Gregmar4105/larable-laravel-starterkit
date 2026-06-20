@@ -8,6 +8,7 @@ Welcome to the Larable documentation. This is the root index for all project doc
 - [[api-design]] — API versioning and idempotency patterns
 - [[authentication]] — Fortify/Sanctum auth flow (login, 2FA, passkeys)
 - [[database]] — PostgreSQL schema design
+- [[ui-design]] — UI Design System (shadcn UI style)
 
 ## Guides
 

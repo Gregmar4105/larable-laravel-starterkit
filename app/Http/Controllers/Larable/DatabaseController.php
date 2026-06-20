@@ -54,7 +54,7 @@ class DatabaseController extends Controller
             return response()->json(['error' => "Table '{$name}' does not exist."], 404);
         }
 
-        $perPage = min((int) $request->input('per_page', 25), 100);
+        $perPage = min((int) $request->input('per_page', 10), 100);
         $page = max((int) $request->input('page', 1), 1);
         $orderBy = $request->input('order_by', 'id');
         $orderDir = $request->input('order_dir', 'asc');
@@ -184,5 +184,59 @@ class DatabaseController extends Controller
                 'primary' => $idx['primary'] ?? false,
             ])
             ->toArray();
+    }
+
+    /**
+     * Execute a raw SQL query.
+     */
+    public function executeQuery(Request $request): JsonResponse
+    {
+        $query = trim($request->input('query', ''));
+
+        if (empty($query)) {
+            return response()->json(['error' => 'Query cannot be empty.'], 422);
+        }
+
+        $startTime = microtime(true);
+        $isRead = preg_match('/^\s*(select|with|show|describe|explain|pragma)/i', $query);
+
+        try {
+            if ($isRead) {
+                $results = DB::select($query);
+                $duration = round((microtime(true) - $startTime) * 1000, 2);
+
+                $data = array_map(fn($row) => (array) $row, $results);
+                $columns = count($data) > 0 ? array_keys($data[0]) : [];
+
+                return response()->json([
+                    'type' => 'select',
+                    'columns' => $columns,
+                    'data' => $data,
+                    'affected_rows' => count($data),
+                    'duration_ms' => $duration,
+                ]);
+            } else {
+                $isMutating = preg_match('/^\s*(insert|update|delete)/i', $query);
+                if ($isMutating) {
+                    $affected = DB::affectingStatement($query);
+                } else {
+                    DB::statement($query);
+                    $affected = 0;
+                }
+                $duration = round((microtime(true) - $startTime) * 1000, 2);
+
+                return response()->json([
+                    'type' => 'statement',
+                    'affected_rows' => $affected,
+                    'duration_ms' => $duration,
+                ]);
+            }
+        } catch (\Throwable $e) {
+            $duration = round((microtime(true) - $startTime) * 1000, 2);
+            return response()->json([
+                'error' => $e->getMessage(),
+                'duration_ms' => $duration,
+            ], 400);
+        }
     }
 }

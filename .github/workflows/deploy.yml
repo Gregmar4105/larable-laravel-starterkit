@@ -1,0 +1,29 @@
+name: Self-Hosted CI/CD Deployment
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  deploy:
+    name: Deploy to Self-Hosted Server
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy (Windows Host)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          ./scripts/deploy-runner-cicd.ps1
+
+      - name: Deploy (Linux/macOS Host)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          chmod +x ./scripts/deploy-runner-cicd.sh
+          ./scripts/deploy-runner-cicd.sh

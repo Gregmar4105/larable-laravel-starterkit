@@ -73,6 +73,7 @@ Larable uses a **decoupled architecture** where the frontend and backend are ful
 | HTTP Client | Axios | 1.7+ |
 | Routing | React Router DOM | 7.x |
 | Icons | Lucide React | Latest |
+| Styling | Vanilla CSS (shadcn UI style) | N/A |
 | Database | PostgreSQL | 16 (Alpine) |
 | Containerization | Docker + Docker Compose | Latest |
 | Email Testing | Mailpit | Latest |
@@ -124,7 +125,7 @@ larable-laravel-staterkit/
 │   │   │   ├── Dashboard.tsx
 │   │   │   └── Settings.tsx
 │   │   └── styles/
-│   │       └── index.css         # Design system
+│   │       └── index.css         # Design system (shadcn UI Zinc style)
 │   ├── routes.tsx                # Route definitions (like api.php)
 │   ├── package.json
 │   ├── vite.config.ts
@@ -149,7 +150,8 @@ larable-laravel-staterkit/
 │   │   ├── overview.md
 │   │   ├── api-design.md
 │   │   ├── authentication.md
-│   │   └── database.md
+│   │   ├── database.md
+│   │   └── ui-design.md          # UI design documentation
 │   ├── guides/
 │   │   ├── getting-started.md
 │   │   ├── docker.md
@@ -380,6 +382,10 @@ Authentication state is managed via React Context (`AuthContext.tsx`):
 - `login()`, `register()`, `logout()` — Auth actions
 - `forgotPassword()`, `resetPassword()` — Password reset
 - `refreshUser()` — Re-fetch user from API
+
+### Styling System
+
+The application layout, typography, components, and inputs follow the **shadcn UI (Zinc theme)** design system. This system is implemented purely using custom CSS variables (in [index.css](file:///c:/Users/PC/Herd/larable-laravel-staterkit/frontend/src/styles/index.css)) and dark/light modes. See [[ui-design]] for the design system guide.
 
 ---
 
