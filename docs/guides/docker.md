@@ -7,7 +7,7 @@ Larable's Docker setup is defined in `docker-compose.yml` at the project root.
 ### app (Laravel)
 - PHP 8.3 CLI with `artisan serve`
 - Mounts the entire project directory
-- Depends on PostgreSQL and Mailpit
+- Depends on PostgreSQL, Mailpit, and Redis
 
 ### frontend (React)
 - Node.js 20 Alpine
@@ -23,6 +23,10 @@ Larable's Docker setup is defined in `docker-compose.yml` at the project root.
 - SMTP on port 1025
 - Web UI on port 8025
 - Catches all outgoing emails
+
+### redis (Cache, Session, & Queue)
+- Redis Alpine image on port 6379
+- Acts as central store for caching, user session states, and background queue jobs for optimal host performance.
 
 ## Network
 

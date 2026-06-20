@@ -17,6 +17,8 @@ services:
         condition: service_healthy
       mailpit:
         condition: service_started
+      redis:
+        condition: service_started
     environment:
       APP_ENV: ${APP_ENV:-local}
       APP_DEBUG: ${APP_DEBUG:-true}
@@ -29,6 +31,8 @@ services:
       MAIL_MAILER: smtp
       MAIL_HOST: mailpit
       MAIL_PORT: 1025
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     networks:
       - larable
 
@@ -113,6 +117,16 @@ services:
     environment:
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
+    networks:
+      - larable
+
+  # ─── Redis (Caching, Sessions, Queues) ────────────────────────────────
+  redis:
+    image: redis:alpine
+    container_name: larable-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
     networks:
       - larable
 
