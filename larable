@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+# Exit if any subcommand fails
+set -e
+
+# Support CLI commands mapping
+case "$1" in
+  up)
+    docker-compose up -d
+    ;;
+  down)
+    docker-compose down
+    ;;
+  restart)
+    docker-compose down && docker-compose up -d
+    ;;
+  test)
+    docker-compose exec app php artisan test
+    ;;
+  fresh)
+    docker-compose exec app php artisan migrate:fresh --seed
+    ;;
+  logs)
+    docker-compose logs -f
+    ;;
+  shell)
+    docker-compose exec app bash
+    ;;
+  lint)
+    docker-compose exec app ./vendor/bin/pint --test
+    ;;
+  build)
+    docker-compose build
+    ;;
+  setup)
+    bash ./scripts/setup.sh
+    ;;
+  *)
+    echo "Usage: ./larable {up|down|restart|test|fresh|logs|shell|lint|build|setup}"
+    exit 1
+    ;;
+esac

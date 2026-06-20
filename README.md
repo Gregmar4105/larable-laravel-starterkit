@@ -30,9 +30,16 @@ Larable is a state-of-the-art, fully decoupled full-stack starter kit combining 
 Ensure you have **Docker** and **Docker Compose** installed.
 
 ### 1. Initialize the project
-Using the included `Makefile`, run:
+Using the included `larable` CLI wrapper, run:
 ```bash
-make setup
+# On Windows (PowerShell):
+.\larable setup
+
+# On Windows (CMD):
+larable setup
+
+# On macOS/Linux:
+./larable setup
 ```
 This will:
 - Spin up the containers (PHP-FPM, Nginx, PostgreSQL, Redis, Mailpit)
@@ -70,13 +77,20 @@ For detailed information on design patterns, route versioning, and architecture 
 
 ---
 
-## 🛠️ Makefile Commands Reference
+## 🛠️ CLI Helper Commands Reference
 
-- `make up` - Start containers in background
-- `make down` - Stop and clean up containers
-- `make restart` - Restart containers
-- `make test` - Run backend test suite (Pest)
-- `make fresh` - Refresh database schema and re-seed
-- `make lint` - Check code style with Pint
-- `make shell` - Open bash inside PHP container
-- `make logs` - Watch container logs
+Use the `larable` CLI tool wrapper:
+- **Windows (PowerShell)**: `.\larable <command>`
+- **Windows (CMD)**: `larable <command>`
+- **macOS/Linux**: `./larable <command>`
+
+### Available Commands:
+- `setup` - Spin up services, install composer/npm packages, generate keys, run migrations and seed data.
+- `up` - Start containers in background.
+- `down` - Stop and clean up containers.
+- `restart` - Restart containers.
+- `test` - Run backend test suite (Pest).
+- `fresh` - Refresh database schema and re-seed.
+- `lint` - Check code style with Pint.
+- `shell` - Open bash inside PHP container.
+- `logs` - Watch container logs.

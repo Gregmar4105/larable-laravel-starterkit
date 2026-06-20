@@ -6,7 +6,14 @@ Thank you for considering contributing to Larable! To maintain code quality and 
 
 Refer to the **Quick Start** section in the [README.md](README.md) to set up your environment using Docker and Make:
 ```bash
-make setup
+# On Windows (PowerShell):
+.\larable setup
+
+# On Windows (CMD):
+larable setup
+
+# On macOS/Linux:
+./larable setup
 ```
 
 ## 📜 Coding Standards
@@ -16,7 +23,14 @@ We follow Laravel's coding standards. We use **Laravel Pint** to format code aut
 ### Code Style Checks
 Before committing any backend changes, run Pint to ensure code styling compliance:
 ```bash
-make lint
+# On Windows (PowerShell):
+.\larable lint
+
+# On Windows (CMD):
+larable lint
+
+# On macOS/Linux:
+./larable lint
 ```
 Alternatively, format files locally using:
 ```bash
@@ -37,7 +51,14 @@ We use **Pest PHP** for testing the backend. All new features and bug fixes must
 ### Running Tests
 To run the Pest test suite:
 ```bash
-make test
+# On Windows (PowerShell):
+.\larable test
+
+# On Windows (CMD):
+larable test
+
+# On macOS/Linux:
+./larable test
 ```
 Or run Pest directly:
 ```bash

@@ -195,6 +195,9 @@ larable-laravel-staterkit/
 │
 ├── docker-compose.yml
 ├── Dockerfile
+├── larable                     # Unix CLI wrapper script
+├── larable.bat                 # Windows CLI wrapper script
+├── Makefile                    # Make command list
 ├── LARABLE_ARCHITECTURE.md       # This file
 └── .env
 ```
