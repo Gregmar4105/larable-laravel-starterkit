@@ -46,34 +46,11 @@ EXPOSE 9000
 CMD ["php-fpm"]
 
 # ─── Stage: Production (Nginx + PHP-FPM) ──────────────────────────────
-FROM php:8.3-fpm AS production-php
+FROM base AS production-php
 
-RUN apt-get update && apt-get install -y \
-    libpq-dev \
-    libzip-dev \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    libonig-dev \
-    libxml2-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install \
-        pdo \
-        pdo_pgsql \
-        pgsql \
-        bcmath \
-        gd \
-        zip \
-        mbstring \
-        xml \
-        pcntl \
-        opcache \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+RUN docker-php-ext-install opcache
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-WORKDIR /var/www/html
+COPY docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 
 COPY . .
 

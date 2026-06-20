@@ -92,6 +92,9 @@ larable-laravel-staterkit/
 │   │   ├── Controllers/
 │   │   │   ├── Api/V1/           # Versioned API controllers
 │   │   │   │   ├── AuthController.php
+│   │   │   │   ├── PasskeyController.php
+│   │   │   │   ├── PasswordResetController.php
+│   │   │   │   ├── TwoFactorController.php
 │   │   │   │   └── UserController.php
 │   │   │   └── Larable/          # Backend GUI controllers
 │   │   │       ├── DashboardController.php
@@ -101,7 +104,19 @@ larable-laravel-staterkit/
 │   │   │       └── GraphController.php
 │   │   ├── Middleware/
 │   │   │   ├── IdempotencyMiddleware.php
-│   │   │   └── ApiVersionMiddleware.php
+│   │   │   ├── ApiVersionMiddleware.php
+│   │   │   └── LarableAuthMiddleware.php
+│   │   ├── Requests/             # Form Request classes
+│   │   │   ├── Api/V1/
+│   │   │   │   ├── ConfirmTwoFactorRequest.php
+│   │   │   │   ├── ForgotPasswordRequest.php
+│   │   │   │   ├── LoginRequest.php
+│   │   │   │   ├── RegisterRequest.php
+│   │   │   │   ├── ResetPasswordRequest.php
+│   │   │   │   ├── UpdatePasswordRequest.php
+│   │   │   │   └── UpdateProfileRequest.php
+│   │   │   └── Larable/
+│   │   │       └── ExecuteQueryRequest.php
 │   │   └── Resources/
 │   │       └── UserResource.php
 │   ├── Models/
@@ -246,6 +261,19 @@ All API routes are versioned with URL prefixes:
 Version files are located at `routes/api/v1.php`, `routes/api/v2.php`, etc.
 
 The `ApiVersionMiddleware` adds an `X-API-Version` response header.
+
+### Rate Limiting
+
+Larable applies multi-tier rate limiting to prevent abuse:
+- **API routes**: Protected by `throttle:api` (60 requests per minute per user/IP).
+- **Authentication routes**: Protected by `throttle:login` (5 attempts per minute per email + IP) to mitigate brute-force attacks.
+
+### Versioning Deprecation Strategy
+
+To phase out old API versions:
+1. **Notice phase**: Add an `X-API-Deprecated: true` response header to deprecate versions.
+2. **Sunset phase**: Add an `X-API-Sunset: YYYY-MM-DD` header indicating the shutdown date.
+3. **Shutdown phase**: Return a `410 Gone` HTTP status with a JSON payload guiding the user to migrate to the newer API version.
 
 ### Idempotency
 
@@ -606,6 +634,23 @@ docker compose exec app php debugging/mail-test.php
 - [ ] Use the `production` target in Dockerfile
 - [ ] Set up proper log rotation
 - [ ] Configure Redis for sessions/cache (optional)
+
+### Production Optimizations (Caching)
+
+Run these commands inside your production container to boost performance:
+```bash
+# Cache configuration loading
+php artisan config:cache
+
+# Cache routing table
+php artisan route:cache
+
+# Cache event listeners
+php artisan event:cache
+
+# Cache Eloquent models proxy info
+php artisan model:prune
+```
 
 ### Production Docker Compose Override
 

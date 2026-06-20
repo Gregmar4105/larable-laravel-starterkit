@@ -35,6 +35,11 @@ services:
       REDIS_PORT: 6379
     networks:
       - larable
+    healthcheck:
+      test: ["CMD", "php", "artisan", "about"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   # ─── Nginx Web Server (Development proxy) ───────────────────────────
   web:

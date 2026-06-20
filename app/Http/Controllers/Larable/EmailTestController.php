@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Larable;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Mail\Message;
 
 /**
  * Email Test Controller
@@ -48,7 +48,7 @@ class EmailTestController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to send email: ' . $e->getMessage(),
+                'message' => 'Failed to send email: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -59,7 +59,7 @@ class EmailTestController extends Controller
     public function inbox(Request $request): JsonResponse
     {
         try {
-            $response = Http::timeout(5)->get($this->mailpitUrl . '/api/v1/messages', [
+            $response = Http::timeout(5)->get($this->mailpitUrl.'/api/v1/messages', [
                 'limit' => $request->input('limit', 50),
             ]);
 
@@ -74,7 +74,7 @@ class EmailTestController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'messages' => [],
-                'error' => 'Mailpit is not accessible: ' . $e->getMessage(),
+                'error' => 'Mailpit is not accessible: '.$e->getMessage(),
             ]);
         }
     }
@@ -85,7 +85,7 @@ class EmailTestController extends Controller
     public function message(string $id): JsonResponse
     {
         try {
-            $response = Http::timeout(5)->get($this->mailpitUrl . '/api/v1/message/' . $id);
+            $response = Http::timeout(5)->get($this->mailpitUrl.'/api/v1/message/'.$id);
 
             if ($response->successful()) {
                 return response()->json($response->json());
@@ -93,7 +93,7 @@ class EmailTestController extends Controller
 
             return response()->json(['error' => 'Message not found'], 404);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Mailpit is not accessible: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Mailpit is not accessible: '.$e->getMessage()], 500);
         }
     }
 
@@ -103,7 +103,7 @@ class EmailTestController extends Controller
     public function clear(): JsonResponse
     {
         try {
-            Http::timeout(5)->delete($this->mailpitUrl . '/api/v1/messages');
+            Http::timeout(5)->delete($this->mailpitUrl.'/api/v1/messages');
 
             return response()->json([
                 'success' => true,
@@ -112,7 +112,7 @@ class EmailTestController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to clear inbox: ' . $e->getMessage(),
+                'message' => 'Failed to clear inbox: '.$e->getMessage(),
             ], 500);
         }
     }

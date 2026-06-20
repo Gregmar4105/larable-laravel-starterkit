@@ -98,7 +98,7 @@ class GraphController extends Controller
      */
     public function fileContent(string $path): JsonResponse
     {
-        $fullPath = base_path('docs/' . $path);
+        $fullPath = base_path('docs/'.$path);
 
         if (! File::exists($fullPath) || ! str_ends_with($fullPath, '.md')) {
             return response()->json(['error' => 'File not found'], 404);
@@ -122,6 +122,7 @@ class GraphController extends Controller
     protected function extractWikiLinks(string $content): array
     {
         preg_match_all('/\[\[([^\]]+)\]\]/', $content, $matches);
+
         return array_unique($matches[1] ?? []);
     }
 
@@ -133,6 +134,7 @@ class GraphController extends Controller
         if (preg_match('/^#\s+(.+)$/m', $content, $match)) {
             return trim($match[1]);
         }
+
         return null;
     }
 }

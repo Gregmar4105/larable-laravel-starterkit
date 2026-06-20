@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Larable;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -36,7 +37,7 @@ class ApiPlaygroundController extends Controller
 
         // Build the full URL (resolve relative to current request host)
         if (str_starts_with($url, '/')) {
-            $url = $request->getSchemeAndHttpHost() . $url;
+            $url = $request->getSchemeAndHttpHost().$url;
         }
 
         // Build headers
@@ -46,20 +47,20 @@ class ApiPlaygroundController extends Controller
         ], $headers);
 
         if ($bearerToken) {
-            $requestHeaders['Authorization'] = 'Bearer ' . $bearerToken;
+            $requestHeaders['Authorization'] = 'Bearer '.$bearerToken;
         }
 
         // Add idempotency key for mutation methods
         if (in_array($method, ['POST', 'PUT', 'PATCH'])) {
-            $requestHeaders['Idempotency-Key'] = 'playground-' . uniqid();
+            $requestHeaders['Idempotency-Key'] = 'playground-'.uniqid();
         }
 
         $startTime = microtime(true);
 
         try {
-            $isLocal = str_starts_with($url, '/') 
-                || str_contains($url, 'localhost') 
-                || str_contains($url, '127.0.0.1') 
+            $isLocal = str_starts_with($url, '/')
+                || str_contains($url, 'localhost')
+                || str_contains($url, '127.0.0.1')
                 || str_contains($url, 'app')
                 || str_contains($url, '.test')
                 || parse_url($url, PHP_URL_HOST) === $request->getHost();
@@ -69,7 +70,7 @@ class ApiPlaygroundController extends Controller
                 $parsedUrl = parse_url($url);
                 $uri = $parsedUrl['path'] ?? '/';
                 if (isset($parsedUrl['query'])) {
-                    $uri .= '?' . $parsedUrl['query'];
+                    $uri .= '?'.$parsedUrl['query'];
                 }
 
                 $content = null;
@@ -90,7 +91,7 @@ class ApiPlaygroundController extends Controller
                 }
 
                 $originalRequest = request();
-                $kernel = app(\Illuminate\Contracts\Http\Kernel::class);
+                $kernel = app(Kernel::class);
                 $responseObj = $kernel->handle($internalRequest);
                 app()->instance('request', $originalRequest);
 

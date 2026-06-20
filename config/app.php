@@ -133,4 +133,18 @@ return [
     */
     'frontend_url' => env('FRONTEND_URL', 'http://localhost:3000'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Larable Backend GUI
+    |--------------------------------------------------------------------------
+    |
+    | Password for the Larable backend GUI (/larable). Set this to protect
+    | the developer dashboard. If empty, access will be denied.
+    |
+    | SQL readonly mode restricts the query runner to SELECT-only queries.
+    |
+    */
+    'larable_password' => env('LARABLE_PASSWORD', ''),
+    'larable_sql_readonly' => env('LARABLE_SQL_READONLY', true),
+
 ];

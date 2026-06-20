@@ -23,18 +23,27 @@ return [
         env('FRONTEND_URL', 'http://localhost:3000'),
         'http://localhost:3000',
         'http://127.0.0.1:3000',
-        'http://' . basename(base_path()) . '-frontend.test:3000',
+        'http://'.basename(base_path()).'-frontend.test:3000',
     ],
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+    'allowed_headers' => [
+        'Content-Type',
+        'Accept',
+        'Authorization',
+        'X-XSRF-TOKEN',
+        'X-Requested-With',
+        'Idempotency-Key',
+    ],
 
-    'exposed_headers' => [],
+    'exposed_headers' => [
+        'X-API-Version',
+        'X-Idempotency-Replay',
+    ],
 
-    'max_age' => 0,
+    'max_age' => 86400, // Cache CORS preflight for 24 hours
 
     'supports_credentials' => true,
-
 
 ];

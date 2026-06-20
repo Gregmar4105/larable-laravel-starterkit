@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Larable\DashboardController;
 use App\Http\Controllers\Larable\ApiPlaygroundController;
+use App\Http\Controllers\Larable\DashboardController;
 use App\Http\Controllers\Larable\DatabaseController;
-use App\Http\Controllers\Larable\GraphController;
 use App\Http\Controllers\Larable\EmailTestController;
+use App\Http\Controllers\Larable\GraphController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,9 +30,9 @@ Route::get('/', function () {
 |
 */
 if (config('app.debug')) {
-    Route::prefix('larable')->name('larable.')->group(function () {
+    Route::prefix('larable')->name('larable.')->middleware('larable.auth')->group(function () {
         // Dashboard
-        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::match(['get', 'post'], '/', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/endpoints', [DashboardController::class, 'endpoints'])->name('endpoints');
 
         // API Playground

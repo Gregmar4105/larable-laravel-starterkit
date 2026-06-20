@@ -50,7 +50,7 @@ class DashboardController extends Controller
                     ->values()
                     ->toArray();
 
-                $uri = '/' . $route->uri();
+                $uri = '/'.$route->uri();
                 $group = $this->extractGroup($uri);
                 $description = $this->generateDescription($methods[0] ?? 'GET', $uri);
 
@@ -116,8 +116,9 @@ class DashboardController extends Controller
             'PUT /api/v1/user/password' => 'Change the authenticated user\'s password.',
         ];
 
-        $key = $method . ' ' . $uri;
-        return $descriptions[$key] ?? 'API endpoint: ' . $method . ' ' . $uri;
+        $key = $method.' '.$uri;
+
+        return $descriptions[$key] ?? 'API endpoint: '.$method.' '.$uri;
     }
 
     /**
@@ -161,7 +162,7 @@ class DashboardController extends Controller
         ];
 
         $methods = collect($route->methods())->reject(fn ($m) => $m === 'HEAD')->values()->toArray();
-        $key = ($methods[0] ?? 'GET') . ' /' . $route->uri();
+        $key = ($methods[0] ?? 'GET').' /'.$route->uri();
 
         return $bodyKeyMap[$key] ?? [];
     }

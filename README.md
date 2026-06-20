@@ -1,61 +1,82 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Larable Starter Kit
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Larable is a state-of-the-art, fully decoupled full-stack starter kit combining the power of **Laravel 13** and **React 19** with **Vite**. It is pre-configured with production-ready DevOps patterns, developer workflows, and security safeguards.
 
-> [!IMPORTANT]
-> **AI Coding Agent Instructions**: Before modifying or editing any code in this repository, you **MUST** read and adhere to the developer guidelines defined in [docs/copilot-instructions.md](docs/copilot-instructions.md).
+## 🚀 Tech Stack
 
-## About Laravel
+- **Backend**: Laravel 13 (decoupled API design)
+- **Frontend**: React 19, Vite, TypeScript, Vanilla CSS
+- **Database**: PostgreSQL 16
+- **Caching & Queues**: Redis (Alpine)
+- **Email Testing**: Mailpit (local SMTP trap)
+- **Local DNS**: Dnsmasq wildcard DNS
+- **Local Dev**: Docker Compose, Makefile
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Decoupled Auth System**: SPA-friendly cookie-based and Token-based authentication using Laravel Sanctum and Laravel Fortify.
+- **Two-Factor Authentication (2FA)**: Fully implemented 2FA with QR codes and backup recovery codes.
+- **Secured Database GUI**: In-browser database introspection under `/larable` with read-only query execution mode, dangerous statement blocking, and PostgreSQL statement timeouts.
+- **Global Error Handling**: React `ErrorBoundary` and a custom toast notification context/provider.
+- **API Versioning & Idempotency**: `X-API-Version` middleware and automatic API replay detection.
+- **CI/CD Pipeline**: GitHub Actions for linting (Pint) and automated Pest/TypeScript checks.
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Quick Start
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Ensure you have **Docker** and **Docker Compose** installed.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
+### 1. Initialize the project
+Using the included `Makefile`, run:
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+make setup
 ```
+This will:
+- Spin up the containers (PHP-FPM, Nginx, PostgreSQL, Redis, Mailpit)
+- Install Composer dependencies
+- Generate application keys
+- Run migrations and seed default data
+- Install frontend packages and build assets
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Access the Application
+- **Frontend**: [http://localhost:3000](http://localhost:3000)
+- **Backend API**: [http://localhost:8000](http://localhost:8000)
+- **Database Management GUI**: [http://localhost:8000/larable](http://localhost:8000/larable) (Password protected)
+- **Mailpit Inbox**: [http://localhost:8025](http://localhost:8025)
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🔒 Credentials & Environment
 
-## Code of Conduct
+### Default Demo User
+- **Email**: `admin@larable.test`
+- **Password**: `password`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Larable GUI Protection
+- **Dashboard Password**: Set `LARABLE_PASSWORD` in your `.env`. The default is `larable`.
+- **SQL Read-Only Mode**: Controlled by `LARABLE_SQL_READONLY` (defaults to `true`).
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 📂 Project Architecture
 
-## License
+For detailed information on design patterns, route versioning, and architecture details, refer to:
+- [LARABLE_ARCHITECTURE.md](LARABLE_ARCHITECTURE.md)
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [CHANGELOG.md](CHANGELOG.md)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 🛠️ Makefile Commands Reference
+
+- `make up` - Start containers in background
+- `make down` - Stop and clean up containers
+- `make restart` - Restart containers
+- `make test` - Run backend test suite (Pest)
+- `make fresh` - Refresh database schema and re-seed
+- `make lint` - Check code style with Pint
+- `make shell` - Open bash inside PHP container
+- `make logs` - Watch container logs
